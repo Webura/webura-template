@@ -28,6 +28,7 @@ var template = function (options) {
       path: null
     },
     workers: 1,
+    allowedMemoryLeak:20000000,//20MB
     middlewares: function () {
     }
   };
@@ -209,11 +210,10 @@ var template = function (options) {
       setTimeout(function () {
         var startRss = process.memoryUsage().rss;
         setInterval(function () {
-          var newRss = process.memoryUsage().rss;
-          if (newRss - startRss > 20000000) {
+          if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
             setTimeout(function () {
-              if (newRss - startRss > 20000000) {
-                console.error('GROWING MEMORY: from ', startRss, 'to', newRss);
+              if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
+                console.error('GROWING MEMORY: from ', startRss, 'to', process.memoryUsage().rss);
                 process.exit(1);
               }
             }, time);
