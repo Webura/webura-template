@@ -41,10 +41,10 @@ var template = function (options) {
     var nodemailer = require('nodemailer');
     var smtpTransport = require('nodemailer-smtp-transport');
     transporter = nodemailer.createTransport(smtpTransport({
-      host: settings.smtp.host,
+      host: settings.smtp.server,
       auth: {
         user: settings.smtp.user,
-        pass: settings.smtp.pass
+        pass: settings.smtp.password
       },
       secure: true
     }));
@@ -53,7 +53,7 @@ var template = function (options) {
     template.email(settings.smtp.supportEmail, subject, body, callback);
   };
   template.email = function (to, subject, body, callback) {
-    if (settings.smtp.server) {
+    if (!transporter) {
       console.log(to);
       console.log(subject);
       console.log(body);
@@ -75,7 +75,7 @@ var template = function (options) {
     }
   };
   template.emailHtml = function (to, subject, body, callback) {
-    if (settings.smtp.server) {
+    if (!transporter) {
       console.log(to);
       console.log(subject);
       console.log(body);
