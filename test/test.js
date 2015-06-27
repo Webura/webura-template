@@ -27,7 +27,7 @@ template({
     url: '/public',
     path: path.join(__dirname, 'public')
   },
-  workers: 2,
+  workers: 1,
   middlewares: function (app) {
     var express = require('express');
     var router = express.Router();

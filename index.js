@@ -201,9 +201,23 @@ var template = function (options) {
     });
 
     app.listen(settings.serverPort, function () {
+      var time = 1000 * 60 * 5;//5 minutes
       console.log('EXPRESS: port ' + settings.serverPort);
+      setTimeout(function () {
+        var startRss = process.memoryUsage().rss;
+        setInterval(function () {
+          var newRss = process.memoryUsage().rss;
+          if (newRss - startRss > 20000000) {
+            setTimeout(function () {
+              if (newRss - startRss > 20000000) {
+                console.error('GROWING MEMORY: from ', startRss, 'to', newRss);
+                process.exit(1);
+              }
+            }, time);
+          }
+        }, time);
+      }, 10000);
     });
-
   }
 };
 
