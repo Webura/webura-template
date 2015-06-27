@@ -24,6 +24,6 @@
     "mongoose": "~4.0.6 "
   },
   "repository": {
-    "url": "https://github.com/Webura/webura-templace.git"
+    "url": "https://github.com/Webura/webura-template.git"
   }
 }
