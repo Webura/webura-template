@@ -8,11 +8,8 @@ If you use Mongoose you need to install it too. Not bundled, due to version
 
 `npm install mongoose --save`
 
-
-
 ## Usage
 ```
-
 var template = require('webura-template');
 var path = require('path');
 
@@ -43,7 +40,8 @@ template({
     path: path.join(__dirname, 'public')
   },
   middlewares: function (app) {
-    var router = template.Router();
+    var express = require('express');
+    var router = express.Router();
     router.get('/', function (req, res) {
       res.send('<html><head><title>Test</title><link href="/public/test.css" rel="stylesheet" type="text/css"></head><body><h1>Hello world!</h1></body></html>');
     });

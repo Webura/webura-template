@@ -28,7 +28,8 @@ template({
     path: path.join(__dirname, 'public')
   },
   middlewares: function (app) {
-    var router = template.Router();
+    var express = require('express');
+    var router = express.Router();
     router.get('/', function (req, res) {
       res.send('<html><head><title>Test</title><link href="/public/test.css" rel="stylesheet" type="text/css"></head><body><h1>Hello world!</h1></body></html>');
     });
