@@ -1,11 +1,11 @@
 # webura-template
-Lazy template for quick projects using Express and Mongoose. Including compressor, cookie-parser, body-parser.
+Lazy template for quick projects using Express and Mongoose. 
 
 ## Install
 `npm install webura-template --save`
 
-Notice that Express and Mongoose are not bundles, so you can control which version to use.
-Mongoose is optional
+Notice that Express and Mongoose are not bundled so you can control which version to use.
+Express is required and Mongoose is optional
 
 `npm install express --save`
 `npm install mongoose --save`
@@ -53,4 +53,31 @@ template({
 });
 ```
 
+## Features
+On server errors (both synchronous and asynchronous), the server will email the support email and then restart itself.
+Basic middlewares like compressor, cookie-parser, body-parser are included. It is roughly 200 lines, so you can actually just fork it and modify yourself.
 
+
+## Licence
+(The MIT License)
+
+Copyright (c) 2015 Johnny Tsang &lt;johnny@webura.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

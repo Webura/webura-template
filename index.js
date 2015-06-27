@@ -28,15 +28,13 @@ var template = function (options) {
       path: null
     },
     workers: 1,
-    allowedMemoryLeak:20000000,//20MB
+    allowedMemoryLeak: 20000000,//20MB
     middlewares: function () {
     }
   };
   if (options)
     extend(settings, options);
-
   /*--EMAIL----------------------------------------------------------------------------------*/
-
   var transporter;
   if (settings.smtp.server) {
     var nodemailer = require('nodemailer');
@@ -100,12 +98,10 @@ var template = function (options) {
       });
     }
   };
-
   /*--EXPRESS----------------------------------------------------------------------------------*/
   process.env.TZ = 'UTC';
   var cluster = require('cluster');
   var workers = settings.workers;
-
   process.on('uncaughtException', function (err) {
     if (err && err.stack)
       template.emailSupport(settings.name + ' uncaught exception: ' + err.message, err.stack.toString(), function () {
@@ -117,7 +113,6 @@ var template = function (options) {
       });
   });
   //--------CLUSTER MASTER------------------------------------------------------------------------------------------
-
   if (cluster.isMaster) {
     console.log('SERVER: ID %s', process.pid);
     var lastRestart = Date.now();
@@ -129,7 +124,6 @@ var template = function (options) {
 
     for (var i = 0; i < workers; ++i)
       fork();
-
     cluster.on('exit', function (worker) {
       console.error('WORKER: %s died.', worker.process.pid);
       if ((Date.now() - lastRestart ) > 2000)
@@ -137,7 +131,6 @@ var template = function (options) {
       else
         template.emailSupport('SERVER: too frequent failure of workers, will not fork', '');
     });
-
   } else {
     //--------CLUSTER WORKER------------------------------------------------------------------------------------------
     console.log('WORKER: ID %s', process.pid);
@@ -148,7 +141,6 @@ var template = function (options) {
     var bodyParser = require('body-parser');
     var cookieParser = require('cookie-parser');
     var domain = require('domain');
-
 
     template.Router = function () {
       return express.Router();
@@ -170,11 +162,9 @@ var template = function (options) {
       var reqDomain = domain.create();
       reqDomain.add(req);
       reqDomain.add(res);
-
       res.on('close', function () {
         reqDomain.dispose();
       });
-
       reqDomain.on('error', function (err) {
         res.status(500).end(settings.errorPages['500'], function () {
           template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString(), function () {
@@ -198,12 +188,10 @@ var template = function (options) {
     app.use(function (req, res, next) {
       res.status(404).end(settings.errorPages['404']);
     });
-
     app.use(function (err, req, res, next) {
       res.status(500).end(settings.errorPages['500']);
       template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString());
     });
-
     app.listen(settings.serverPort, function () {
       var time = 1000 * 60 * 5;//5 minutes
       console.log('EXPRESS: port ' + settings.serverPort);
@@ -223,7 +211,5 @@ var template = function (options) {
     });
   }
 };
-
-
 /*--EXPORTS----------------------------------------------------------------------------------*/
 module.exports = template;
