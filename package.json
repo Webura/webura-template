@@ -1,0 +1,29 @@
+{
+  "name": "webura-template",
+  "version": "1.0.0",
+  "description": "Lazy template for quick projects",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Johnny Tsang",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.13.1",
+    "compression": "^1.5.0",
+    "cookie-parser": "^1.3.5",
+    "express": "^4.13.0",
+    "extend": "^2.0.1",
+    "nodemailer": "^1.3.4",
+    "nodemailer-smtp-transport": "^1.0.3"
+  },
+  "devDependencies": {
+    "mongoose": "~4.0.6 "
+  },
+  "repository": {
+    "url": "https://github.com/Webura/webura-templace.git"
+  }
+}
