@@ -51,6 +51,9 @@ var template = function (options) {
   }
   template.emailSupport = function (subject, body, callback) {
     template.email(settings.smtp.supportEmail, subject, body, callback);
+    console.log('SUPPORT EMAIL: ', subject);
+    console.log(body);
+    console.log('-----------------');
   };
   template.email = function (to, subject, body, callback) {
     if (!transporter) {
