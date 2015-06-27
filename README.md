@@ -4,8 +4,10 @@ Lazy template for quick projects using Express and Mongoose. Including compresso
 ## Install
 `npm install webura-template --save`
 
-If you use Mongoose you need to install it too. Not bundled, due to version
+Notice that Express and Mongoose are not bundles, so you can control which version to use.
+Mongoose is optional
 
+`npm install express --save`
 `npm install mongoose --save`
 
 ## Usage
@@ -24,11 +26,11 @@ template({
     database: 'webura-template'
   },
   smtp: {
-    fromEmail: '',
-    supportEmail: '',
     server: '',
     user: '',
-    password: ''
+    password: '',
+    fromEmail: '',
+    supportEmail: ''
   },
   secret: '',
   errorPages: {
@@ -39,6 +41,7 @@ template({
     url: '/public',
     path: path.join(__dirname, 'public')
   },
+  workers: 1,
   middlewares: function (app) {
     var express = require('express');
     var router = express.Router();

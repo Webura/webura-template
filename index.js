@@ -187,7 +187,8 @@ var template = function (options) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
     });
-    settings.middlewares(app);
+    if (settings.middlewares)
+      settings.middlewares(app);
     if (settings.public.url && settings.public.path)
       app.use(settings.public.url, express.static(settings.public.path, {maxAge: '30d'}));
     app.use(function (req, res, next) {

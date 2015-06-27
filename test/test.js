@@ -27,10 +27,12 @@ template({
     url: '/public',
     path: path.join(__dirname, 'public')
   },
+  workers: 2,
   middlewares: function (app) {
     var express = require('express');
     var router = express.Router();
     router.get('/', function (req, res) {
+      console.log(process.pid);
       res.send('<html><head><title>Test</title><link href="/public/test.css" rel="stylesheet" type="text/css"></head><body><h1>Hello world!</h1></body></html>');
     });
     router.get('/error', function (req, res) {
@@ -41,8 +43,6 @@ template({
         throw new Error('Async error');
       }, 100);
     });
-
     app.use('/', router);
   }
-
 });
