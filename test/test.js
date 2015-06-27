@@ -12,7 +12,7 @@ template({
     database: 'test'
   },
   smtp: {
-    from: '',
+    fromEmail: '',
     supportEmail: '',
     server: '',
     user: '',

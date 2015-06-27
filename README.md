@@ -24,7 +24,7 @@ template({
     database: 'webura-template'
   },
   smtp: {
-    from: '',
+    fromEmail: '',
     supportEmail: '',
     server: '',
     user: '',

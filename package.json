@@ -1,6 +1,6 @@
 {
   "name": "webura-template",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lazy template for quick projects",
   "main": "index.js",
   "directories": {

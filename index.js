@@ -36,17 +36,19 @@ var template = function (options) {
 
   /*--EMAIL----------------------------------------------------------------------------------*/
 
-  var nodemailer = require('nodemailer');
-  var smtpTransport = require('nodemailer-smtp-transport');
-  var transporter = nodemailer.createTransport(smtpTransport({
-    host: settings.smtp.host,
-    auth: {
-      user: settings.smtp.user,
-      pass: settings.smtp.pass
-    },
-    secure: true
-  }));
-
+  var transporter;
+  if (settings.smtp.server) {
+    var nodemailer = require('nodemailer');
+    var smtpTransport = require('nodemailer-smtp-transport');
+    transporter = nodemailer.createTransport(smtpTransport({
+      host: settings.smtp.host,
+      auth: {
+        user: settings.smtp.user,
+        pass: settings.smtp.pass
+      },
+      secure: true
+    }));
+  }
   template.emailSupport = function (subject, body, callback) {
     template.email(settings.smtp.supportEmail, subject, body, callback);
   };
@@ -73,9 +75,13 @@ var template = function (options) {
     }
   };
   template.emailHtml = function (to, subject, body, callback) {
-    if (settings.isDev)
-      console.log(subject + '\n' + body.replace(/\<br\>/ig, '\n'));
-    else {
+    if (settings.smtp.server) {
+      console.log(to);
+      console.log(subject);
+      console.log(body);
+      if (callback)
+        callback();
+    } else {
       var options = {
         from: settings.smtp.fromEmail,
         to: to,
