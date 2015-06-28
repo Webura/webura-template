@@ -28,7 +28,7 @@ var template = function (options) {
       path: null
     },
     workers: 1,
-    allowedMemoryLeak: 20000000,//20MB
+    allowedMemoryLeak: 30000000,//30MB
     middlewares: function () {
     }
   };
