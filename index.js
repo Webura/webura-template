@@ -105,11 +105,11 @@ var template = function (options) {
   process.on('uncaughtException', function (err) {
     if (err && err.stack)
       template.emailSupport(settings.name + ' uncaught exception: ' + err.message, err.stack.toString(), function () {
-        process.exit(1);
+        process.exit();
       });
     else
       template.emailSupport(settings.name + ' uncaught exception', '', function () {
-        process.exit(1);
+        process.exit();
       });
   });
   //--------CLUSTER MASTER------------------------------------------------------------------------------------------
@@ -157,6 +157,7 @@ var template = function (options) {
     }
 
     //--------COMMON MIDDLEWARES-------------------------------------------------------------------------------
+    app.set('x-powered-by', false);
     app.use(compression());
     app.use(function (req, res, next) {
       var reqDomain = domain.create();
@@ -168,7 +169,7 @@ var template = function (options) {
       reqDomain.on('error', function (err) {
         res.status(500).end(settings.errorPages['500'], function () {
           template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString(), function () {
-            process.exit(1);
+            process.exit();
           });
         });
       });
@@ -202,7 +203,7 @@ var template = function (options) {
             setTimeout(function () {
               if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
                 console.error('GROWING MEMORY: from ', startRss, 'to', process.memoryUsage().rss);
-                process.exit(1);
+                process.exit();
               }
             }, time);
           }
