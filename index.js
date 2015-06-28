@@ -20,8 +20,8 @@ var template = function (options) {
     },
     secret: 'randomABC123!',
     errorPages: {
-      '500': '',
-      '404': ''
+      '500': '<html><head><title>500</title></head><body><h1>Error page</h1></body></html>',
+      '404': '<html><head><title>404</title></head><body><h1>Page not found</h1></body></html>'
     },
     public: {
       url: null,
@@ -114,7 +114,7 @@ var template = function (options) {
   });
   //--------CLUSTER MASTER------------------------------------------------------------------------------------------
   if (cluster.isMaster) {
-    console.log('SERVER: ID %s', process.pid);
+    console.log('SERVER: %s started', process.pid);
     var lastRestart = Date.now();
 
     function fork() {
@@ -133,7 +133,7 @@ var template = function (options) {
     });
   } else {
     //--------CLUSTER WORKER------------------------------------------------------------------------------------------
-    console.log('WORKER: ID %s', process.pid);
+    console.log('WORKER: %s started', process.pid);
     var path = require('path');
     var express = require('express');
     var app = express();
@@ -194,20 +194,20 @@ var template = function (options) {
       template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString());
     });
     app.listen(settings.serverPort, function () {
-      var time = 1000 * 60 * 5;//5 minutes
-      console.log('EXPRESS: port ' + settings.serverPort);
+      var interval = 1000 * 60 * 5;//5 minutes
+      console.log('EXPRESS: listening port ' + settings.serverPort);
       setTimeout(function () {
         var startRss = process.memoryUsage().rss;
         setInterval(function () {
           if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
             setTimeout(function () {
               if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
-                console.error('GROWING MEMORY: from ', startRss, 'to', process.memoryUsage().rss);
+                console.error('GROWING MEMORY: from ', startRss/1000000, 'to', process.memoryUsage().rss/1000000);
                 process.exit();
               }
-            }, time);
+            }, interval);
           }
-        }, time);
+        }, interval);
       }, 10000);
     });
   }
