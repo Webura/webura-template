@@ -18,7 +18,10 @@ template({
     user: '',
     password: ''
   },
-  secret: '',
+  cookie: {
+    secret: 'my cookie secret',
+    maxAge: 1000 * 60 * 60 * 24 * 30
+  },
   errorPages: {
     '500': '<html><head><title>500</title></head><body><h1>Error page</h1></body></html>',
     '404': '<html><head><title>404</title></head><body><h1>Page not found</h1></body></html>'

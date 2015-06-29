@@ -18,6 +18,10 @@ var template = function (options) {
       fromEmail: null,
       supportEmail: null
     },
+    cookie: {
+      secret: '',
+      maxAge: 1000 * 60 * 60 * 24 * 30
+    },
     secret: 'randomABC123!',
     errorPages: {
       '500': '<html><head><title>500</title></head><body><h1>Error page</h1></body></html>',
@@ -139,7 +143,6 @@ var template = function (options) {
     var app = express();
     var compression = require('compression');
     var bodyParser = require('body-parser');
-    var cookieParser = require('cookie-parser');
     var domain = require('domain');
 
     template.Router = function () {
@@ -177,7 +180,10 @@ var template = function (options) {
     });
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    app.use(cookieParser(settings.secret, {maxAge: 1000 * 60 * 60 * 24 * 30}));
+    if (options.cookie.secret) {
+      var cookieParser = require('cookie-parser');
+      app.use(cookieParser(settings.cookie.secret, {maxAge: settings.cookie.maxAge}));
+    }
     app.use(function logger(req, res, next) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
