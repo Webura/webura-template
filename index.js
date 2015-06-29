@@ -177,7 +177,7 @@ var template = function (options) {
     });
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    app.use(cookieParser(settings.secret));
+    app.use(cookieParser(settings.secret, {maxAge: 60 * 60 * 24 * 30}));
     app.use(function logger(req, res, next) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
@@ -202,7 +202,7 @@ var template = function (options) {
           if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
             setTimeout(function () {
               if (process.memoryUsage().rss - startRss > settings.allowedMemoryLeak) {
-                console.error('GROWING MEMORY: from ', startRss/1000000, 'to', process.memoryUsage().rss/1000000);
+                console.error('GROWING MEMORY: from ', startRss / 1000000, 'to', process.memoryUsage().rss / 1000000);
                 process.exit();
               }
             }, interval);
