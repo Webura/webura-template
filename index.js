@@ -177,7 +177,7 @@ var template = function (options) {
     });
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    app.use(cookieParser(settings.secret, {maxAge: 60 * 60 * 24 * 30}));
+    app.use(cookieParser(settings.secret, {maxAge: 1000 * 60 * 60 * 24 * 30}));
     app.use(function logger(req, res, next) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
