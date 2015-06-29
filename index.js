@@ -32,7 +32,7 @@ var template = function (options) {
       path: null
     },
     workers: 1,
-    allowedMemoryLeak: 30000000,//30MB
+    allowedMemoryLeak: 30 * 1000000,//30MB
     middlewares: function () {
     }
   };
@@ -54,9 +54,6 @@ var template = function (options) {
   }
   template.emailSupport = function (subject, body, callback) {
     template.email(settings.smtp.supportEmail, subject, body, callback);
-    console.log('SUPPORT EMAIL: ', subject);
-    console.log(body);
-    console.log('-----------------');
   };
   template.email = function (to, subject, body, callback) {
     if (!transporter) {
@@ -141,13 +138,8 @@ var template = function (options) {
     var path = require('path');
     var express = require('express');
     var app = express();
-    var compression = require('compression');
     var bodyParser = require('body-parser');
     var domain = require('domain');
-
-    template.Router = function () {
-      return express.Router();
-    };
 
     if (settings.mongoose.server) {
       var mongoose = require('mongoose');
@@ -161,7 +153,7 @@ var template = function (options) {
 
     //--------COMMON MIDDLEWARES-------------------------------------------------------------------------------
     app.set('x-powered-by', false);
-    app.use(compression());
+    app.use(require('compression')());
     app.use(function (req, res, next) {
       var reqDomain = domain.create();
       reqDomain.add(req);
