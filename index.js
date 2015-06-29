@@ -180,7 +180,7 @@ var template = function (options) {
     });
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    if (options.cookie.secret) {
+    if (settings.cookie.secret) {
       var cookieParser = require('cookie-parser');
       app.use(cookieParser(settings.cookie.secret, {maxAge: settings.cookie.maxAge}));
     }
