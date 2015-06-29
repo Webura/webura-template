@@ -102,7 +102,6 @@ var template = function (options) {
   /*--EXPRESS----------------------------------------------------------------------------------*/
   process.env.TZ = 'UTC';
   var cluster = require('cluster');
-  var workers = settings.workers;
   process.on('uncaughtException', function (err) {
     if (err && err.stack)
       template.emailSupport(settings.name + ' uncaught exception: ' + err.message, err.stack.toString(), function () {
@@ -123,23 +122,23 @@ var template = function (options) {
       lastRestart = Date.now();
     }
 
-    for (var i = 0; i < workers; ++i)
+    for (var i = 0; i < settings.workers; ++i)
       fork();
     cluster.on('exit', function (worker) {
       console.error('WORKER: %s died.', worker.process.pid);
       if ((Date.now() - lastRestart ) > 2000)
         fork();
-      else
-        template.emailSupport('SERVER: too frequent failure of workers, will not fork', '');
+      else {
+        console.error('SERVER: died');
+        template.emailSupport(settings.name + ' too frequent failure of workers, will not fork', '');
+      }
     });
   } else {
     //--------CLUSTER WORKER------------------------------------------------------------------------------------------
     console.log('WORKER: %s started', process.pid);
-    var path = require('path');
     var express = require('express');
     var app = express();
     var bodyParser = require('body-parser');
-    var domain = require('domain');
 
     if (settings.mongoose.server) {
       var mongoose = require('mongoose');
@@ -155,6 +154,7 @@ var template = function (options) {
     app.set('x-powered-by', false);
     app.use(require('compression')());
     app.use(function (req, res, next) {
+      var domain = require('domain');
       var reqDomain = domain.create();
       reqDomain.add(req);
       reqDomain.add(res);
