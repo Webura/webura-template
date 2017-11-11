@@ -142,12 +142,15 @@ var template = function (options) {
 
     if (settings.mongoose.server) {
       var mongoose = require('mongoose');
-      if (settings.mongoose.user && settings.mongoose.password)
-        mongoose.connect('mongodb://' + settings.mongoose.user + ':' +
-          settings.mongoose.password + '@' + settings.mongoose.server + ':' + settings.mongoose.port + '/' + settings.mongoose.database);
-      else
-        mongoose.connect('mongodb://' + settings.mongoose.server + ':' + settings.mongoose.port + '/' + settings.mongoose.database);
-      console.log('MONGODB: connected');
+      mongoose.connect('mongodb://' +
+        (settings.mongoose.user && settings.mongoose.password ? settings.mongoose.user + ':' + settings.mongoose.password + '@' : '') +
+        settings.mongoose.server + ':' + settings.mongoose.port + '/' + settings.mongoose.database, {useMongoClient: true},
+        function (err) {
+          if (err)
+            console.error('MONGODB: ' + err);
+          else
+            console.log('MONGODB: connected');
+        });
     }
 
     //--------COMMON MIDDLEWARES-------------------------------------------------------------------------------
@@ -180,10 +183,10 @@ var template = function (options) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
     });
-    if (settings.middlewares)
-      settings.middlewares(app);
     if (settings.public.url && settings.public.path)
       app.use(settings.public.url, express.static(settings.public.path, {maxAge: '30d'}));
+    if (settings.middlewares)
+      settings.middlewares(app);
     app.use(function (req, res, next) {
       res.status(404).end(settings.errorPages['404']);
     });
