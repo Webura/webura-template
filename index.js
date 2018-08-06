@@ -32,7 +32,7 @@ var template = function (options) {
       path: null
     },
     workers: 1,
-    allowedMemoryLeak: 30 * 1000000,//30MB
+    allowedMemoryLeak: 50 * 1000000,//50MB
     middlewares: function () {
     }
   };
@@ -195,7 +195,7 @@ var template = function (options) {
       template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString());
     });
     app.listen(settings.serverPort, function () {
-      var interval = 1000 * 60 * 5;//5 minutes
+      var interval = 1000 * 60 * 15;//5 minutes
       console.log('EXPRESS: listening port ' + settings.serverPort);
       setTimeout(function () {
         var startRss = process.memoryUsage().rss;
