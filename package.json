@@ -1,6 +1,6 @@
 {
   "name": "webura-template",
-  "version": "1.0.18",
+  "version": "1.1.0",
   "description": "Lazy template for quick projects",
   "main": "index.js",
   "directories": {
@@ -14,14 +14,13 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.4",
     "extend": "^3.0.2",
-    "nodemailer": "^1.11.0",
-    "nodemailer-smtp-transport": "^1.1.0"
+    "nodemailer": "^5.1.1"
   },
   "devDependencies": {
-    "express": "^4.16.3",
-    "mongoose": "^4.13.1"
+    "express": "*",
+    "mongoose": "^5.4.19"
   },
   "repository": {
     "url": "https://github.com/Webura/webura-template.git"

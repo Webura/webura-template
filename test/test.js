@@ -5,7 +5,7 @@ template({
   name: 'Webura Template Test',
   serverPort: 3000,
   mongoose: {
-    server: 'localhost',
+    server: '',
     port: 27017,
     user: '',
     password: '',

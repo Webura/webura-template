@@ -33,6 +33,7 @@ var template = function (options) {
     },
     workers: 1,
     allowedMemoryLeak: 50 * 1000000,//50MB
+    checkMemoryLeakInterval: 1000 * 60 * 60,// 60 minutes
     middlewares: function () {
     }
   };
@@ -42,15 +43,14 @@ var template = function (options) {
   var transporter;
   if (settings.smtp.server) {
     var nodemailer = require('nodemailer');
-    var smtpTransport = require('nodemailer-smtp-transport');
-    transporter = nodemailer.createTransport(smtpTransport({
+    transporter = nodemailer.createTransport({
       host: settings.smtp.server,
       auth: {
         user: settings.smtp.user,
         pass: settings.smtp.password
       },
       secure: true
-    }));
+    });
   }
   template.emailSupport = function (subject, body, callback) {
     template.email(settings.smtp.supportEmail, subject, body, callback);
@@ -126,7 +126,7 @@ var template = function (options) {
       fork();
     cluster.on('exit', function (worker) {
       console.error('WORKER: %s died.', worker.process.pid);
-      if ((Date.now() - lastRestart ) > 2000)
+      if ((Date.now() - lastRestart) > 2000)
         fork();
       else {
         console.error('SERVER: died');
@@ -144,7 +144,7 @@ var template = function (options) {
       var mongoose = require('mongoose');
       mongoose.connect('mongodb://' +
         (settings.mongoose.user && settings.mongoose.password ? settings.mongoose.user + ':' + settings.mongoose.password + '@' : '') +
-        settings.mongoose.server + ':' + settings.mongoose.port + '/' + settings.mongoose.database, {useMongoClient: true},
+        settings.mongoose.server + ':' + settings.mongoose.port + '/' + settings.mongoose.database, { useMongoClient: true },
         function (err) {
           if (err)
             console.error('MONGODB: ' + err);
@@ -173,18 +173,18 @@ var template = function (options) {
       });
       reqDomain.run(next);
     });
-    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     if (settings.cookie.secret) {
       var cookieParser = require('cookie-parser');
-      app.use(cookieParser(settings.cookie.secret, {maxAge: settings.cookie.maxAge}));
+      app.use(cookieParser(settings.cookie.secret, { maxAge: settings.cookie.maxAge }));
     }
     app.use(function logger(req, res, next) {
       console.log(req.method + ': ' + req.originalUrl);
       next();
     });
     if (settings.public.url && settings.public.path)
-      app.use(settings.public.url, express.static(settings.public.path, {maxAge: '30d'}));
+      app.use(settings.public.url, express.static(settings.public.path, { maxAge: '30d' }));
     if (settings.middlewares)
       settings.middlewares(app);
     app.use(function (req, res, next) {
@@ -195,7 +195,6 @@ var template = function (options) {
       template.emailSupport(settings.name + ' caught error: ' + req.originalUrl, err.stack.toString());
     });
     app.listen(settings.serverPort, function () {
-      var interval = 1000 * 60 * 15;//5 minutes
       console.log('EXPRESS: listening port ' + settings.serverPort);
       setTimeout(function () {
         var startRss = process.memoryUsage().rss;
@@ -206,9 +205,9 @@ var template = function (options) {
                 console.error('GROWING MEMORY: from ', startRss / 1000000, 'to', process.memoryUsage().rss / 1000000);
                 process.exit();
               }
-            }, interval);
+            }, settings.checkMemoryLeakInterval / 2);
           }
-        }, interval);
+        }, settings.checkMemoryLeakInterval / 2);
       }, 10000);
     });
   }
